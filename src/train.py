@@ -39,20 +39,30 @@ def main(args):
     dataset['train'] = dataset['train']
     dataset['validation'] = dataset['validation']
 
+    #--------------------------------
+
     # Tokenize the datasets
+    print('Tokenizing datasets...')
     tokenizer = AutoTokenizer.from_pretrained(args.model, padding_side="right", token=HUGGINGFACE_TOKEN)
 
     # Add padding tokens
     tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "right"
     tokenizer.pad_token_id = tokenizer.eos_token_id
-    
+
+    # Add special tokens
+    if args.special_tokens:
+        print('Adding special tokens...')
+        with open(args.special_tokens, 'r') as f:
+            special_tokens = json.load(f)
+        
+        tokenizer.add_special_tokens(special_tokens)
+
     tokenized_dataset = dataset.map(partial(tokenize_inputs, tokenizer=tokenizer), batched=False, load_from_cache_file=False, remove_columns=dataset['train'].column_names)
   
     #--------------------------------
 
     # Load Model
-
     print('Setting up model...')
 
     model = AutoModelForCausalLM.from_pretrained(args.model,
@@ -92,6 +102,7 @@ def main(args):
         data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
     )
 
+    print('Training model...')
     trainer.train()
 
     # Save the best model
@@ -104,9 +115,10 @@ if __name__ == "__main__":
     # Parse command line arguments
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--model', type=str, default='')
-    parser.add_argument('--dataset', type=str, default='')
-    parser.add_argument("--data-path", type=str, default="./data")
+    parser.add_argument('--model', type=str, required=True)
+    parser.add_argument('--dataset', type=str, required=True)
+    parser.add_argument("--data-path", type=str, default='./data')
+    parser.add_argument("--special-tokens", type=str, default='')
     parser.add_argument('--model-dir', type=str, default=f'model_{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")}')
 
     parser.add_argument("--epochs", type=int, default=4)
