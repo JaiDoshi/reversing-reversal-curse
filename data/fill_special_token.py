@@ -21,23 +21,17 @@ assert len(set(names)) == len(names)
 assert len(set(entities)) == len(entities)
 assert len(set(names) & set(entities)) == 0
 
-#----------------------------
-
-# Create a mapping of names and entities to tokens
-tokenMapping = {}
-for i, name in enumerate(names):
-    tokenMapping[name] = f'[tokN{i + 1}]'
-
-for i, entity in enumerate(entities):
-    tokenMapping[entity] = f'[tokE{i + 1}]'
-
-reverseTokenMapping = {v: k for k, v in tokenMapping.items()}
-
 # Create one list for searching
 searchList = names + entities
 
 # Sort the list by length in descending order (match longer names first)
 searchList.sort(key=len, reverse=True)
+
+#----------------------------
+
+# Create a mapping of names and entities to tokens
+tokenMapping = json.load(open('./data/reverse_experiments/tokenMapping.json'))
+reverseTokenMapping = json.load(open('./data/reverse_experiments/reverseTokenMapping.json'))
 
 #----------------------------
 
