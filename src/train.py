@@ -1,21 +1,17 @@
+import os
+import json
 import argparse
 import datetime
-import os
 from functools import partial
+from dotenv import load_dotenv; load_dotenv()
 
-import numpy as np
 import torch
-import json
 from datasets import load_dataset, load_from_disk
-from dotenv import load_dotenv
+from utils import compute_metrics, tokenize_inputs
 from peft import LoraConfig, TaskType, get_peft_model
 from transformers import (AutoModelForCausalLM, AutoTokenizer,
                           DataCollatorForLanguageModeling, Trainer,
                           TrainingArguments)
-
-from utils import compute_metrics, tokenize_inputs
-
-load_dotenv()
 
 HUGGINGFACE_TOKEN = os.getenv('HF_KEY')
 
@@ -33,7 +29,7 @@ def main(args):
 
     # Load data
     print('Loading data...')
-    dataset = load_from_disk(os.path.join(args.data_path, args.dataset))
+    dataset = load_from_disk(f'{args.experiment_path}/dataset')
     # dataset = load_dataset('lberglund/reversal_curse')
 
     #--------------------------------
@@ -113,8 +109,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--model', type=str, required=True)
-    parser.add_argument('--dataset', type=str, required=True)
-    parser.add_argument("--data-path", type=str, default='./data')
+    parser.add_argument("--experiment-path", type=str, required=True)
     parser.add_argument("--special-tokens", type=str, default='')
     parser.add_argument('--model-dir', type=str, default=f'model_{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")}')
 
@@ -125,7 +120,10 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    # Create model directory
+    args.model_dir = f'{args.experiment_path}/{args.model_dir}'
     os.mkdir(args.model_dir)
+    
     with open(f'{args.model_dir}/argsCLI.json', 'w') as f:
         json.dump(vars(args), f)
 
