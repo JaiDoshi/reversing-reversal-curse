@@ -161,5 +161,3 @@ cython_debug/
 
 #MAC
 *.DS_Store
-
-src/indexCheck.py

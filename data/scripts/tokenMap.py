@@ -34,8 +34,8 @@ reverseTokenMapping = {v: k for k, v in tokenMapping.items()}
 #----------------------------
 
 # Save token mapping
-with open('./data/reverse_experiments/tokenMapping.json', 'w') as f:
+with open('./data/raw/tokenMapping.json', 'w') as f:
     json.dump(tokenMapping, f, indent=2)
 
-with open('./data/reverse_experiments/reverseTokenMapping.json', 'w') as f:
+with open('./data/raw/reverseTokenMapping.json', 'w') as f:
     json.dump(reverseTokenMapping, f, indent=2)
