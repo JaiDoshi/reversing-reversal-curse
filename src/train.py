@@ -6,7 +6,7 @@ from functools import partial
 import numpy as np
 import torch
 import json
-from datasets import load_dataset
+from datasets import load_dataset, load_from_disk
 from dotenv import load_dotenv
 from peft import LoraConfig, TaskType, get_peft_model
 from transformers import (AutoModelForCausalLM, AutoTokenizer,
@@ -33,11 +33,8 @@ def main(args):
 
     # Load data
     print('Loading data...')
-    # dataset = load_from_disk(os.path.join(args.data_path, args.dataset)
-    dataset = load_dataset('lberglund/reversal_curse')
-
-    dataset['train'] = dataset['train']
-    dataset['validation'] = dataset['validation']
+    dataset = load_from_disk(os.path.join(args.data_path, args.dataset))
+    # dataset = load_dataset('lberglund/reversal_curse')
 
     #--------------------------------
 
