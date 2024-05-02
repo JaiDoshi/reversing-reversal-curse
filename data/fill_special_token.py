@@ -1,48 +1,95 @@
 import json
-from collections import defaultdict
+from tqdm import tqdm
 
-path_names = "raw/names.txt"
-path_entities = "raw/entities.txt"
-input_json_path = "reverse_experiments/june_version_7921032488/p2d_prompts_train.jsonl"
-output_json_path = "reverse_experiments/nlu_experiments/p2d_prompts_train_with_1d_special_tok.jsonl"
+path_names = "./data/raw/namesIndexed.txt"
+path_entities = "./data/raw/entitiesIndexed.txt"
+input_json_path = "./data/reverse_experiments/nlu_experiments/d2p_prompts_train.jsonl"
+output_json_path = "./data/reverse_experiments/nlu_experiments/d2p_tokens_train.jsonl"
+
+#----------------------------
+
 # Load names from names.txt
 with open(path_names, 'r') as f:
     names = [line.strip() for line in f]
     
-# Load names from names.txt
+# Load entities from entities.txt
 with open(path_entities, 'r') as f:
     entities = [line.strip() for line in f]
 
-# print(entities)
-# Create a mapping of names to tokens
-name_to_token = defaultdict(lambda: f'[tokN{len(name_to_token) + 1}]')
-for name in names:
-    name_to_token[name]
+# Assert no overlap between names and entities
+assert len(set(names)) == len(names)
+assert len(set(entities)) == len(entities)
+assert len(set(names) & set(entities)) == 0
 
-entity_to_token = defaultdict(lambda: f'[tokE{len(entity_to_token) + 1}]')
-for entity in entities:
-    entity_to_token[entity]
-print(entity_to_token)
+#----------------------------
+
+# Create a mapping of names and entities to tokens
+tokenMapping = {}
+for i, name in enumerate(names):
+    tokenMapping[name] = f'[tokN{i + 1}]'
+
+for i, entity in enumerate(entities):
+    tokenMapping[entity] = f'[tokE{i + 1}]'
+
+reverseTokenMapping = {v: k for k, v in tokenMapping.items()}
+
+# Create one list for searching
+searchList = names + entities
+
+# Sort the list by length in descending order (match longer names first)
+searchList.sort(key=len, reverse=True)
+
+#----------------------------
 
 # Function to replace names with tokens
-def replace_names_entities(text):
-    for name, token in name_to_token.items():
-        text = text.replace(name, token)
-    
-    for entity, token in entity_to_token.items():
-        text = text.replace(entity, token)
-    
-    return text
+def replace_names_entities(sentence):
+    prompt = sentence['prompt']
+    completion = sentence['completion']
+
+    for term in searchList:
+        if term in prompt:
+
+            # Assert that only 1 occurrence of the term is present
+            assert prompt.count(term) == 1
+
+            # Check which type of token it is
+            if term in names:
+                # Find corresponding token index
+                tokIdx = tokenMapping[term].replace('[tokN', '').replace(']', '')
+                otherTerm = reverseTokenMapping[f'[tokE{tokIdx}]']
+                # Assert that completion has the other term
+                assert completion.count(otherTerm) == 1
+            else:
+                # Find corresponding token index
+                tokIdx = tokenMapping[term].replace('[tokE', '').replace(']', '')
+                otherTerm = reverseTokenMapping[f'[tokN{tokIdx}]']
+                # Assert that completion has the other term
+                assert completion.count(otherTerm) == 1
+            
+            # Replace the term with the token
+            prompt = prompt.replace(term, tokenMapping[term])
+            completion = completion.replace(otherTerm, tokenMapping[otherTerm])
+            break
+
+    # Assert that changes have been made
+    try:
+        assert prompt != sentence['prompt']
+        assert completion != sentence['completion']
+    except AssertionError as e:
+        print(sentence)
+        raise e
+        
+    return {
+        'prompt': prompt,
+        'completion': completion
+    }
 
 # Read data from jsonl file and write modified data to new jsonl file
 with open(input_json_path, 'r') as input_file, open(output_json_path, 'w') as output_file:
-    for line in input_file:
+    for line in tqdm(input_file):
         data = json.loads(line)
         output_file.write(line)  # Write the original row
 
         # Create a new row with replaced names
-        new_data = {
-            'prompt': replace_names_entities(data['prompt']),
-            'completion': replace_names_entities(data['completion'])
-        }
+        new_data = replace_names_entities(data)
         output_file.write(json.dumps(new_data) + '\n')
