@@ -4,6 +4,7 @@ import argparse
 import datetime
 from functools import partial
 from dotenv import load_dotenv; load_dotenv()
+import pandas as pd
 
 import torch
 from datasets import load_from_disk
@@ -47,7 +48,7 @@ def main(args):
     with open(args.special_tokens, 'r') as f:
         special_tokens = json.load(f)
 
-    special_tokens = {'additional_special_tokens': special_token for special_token in special_tokens.values()}
+    special_tokens = {'additional_special_tokens': [special_token for special_token in special_tokens.values()]}
     tokenizer.add_special_tokens(special_tokens)
 
     tokenized_dataset = dataset.map(partial(tokenize_inputs, tokenizer=tokenizer), batched=False, load_from_cache_file=False, remove_columns=dataset['train'].column_names)
@@ -77,6 +78,7 @@ def main(args):
         learning_rate=args.learning_rate,
         per_device_train_batch_size=args.batch_size,
         seed=args.seed_val,
+        logging_strategy='epoch',
         save_strategy='epoch'
     )
 
@@ -92,7 +94,18 @@ def main(args):
     print('Training model...')
     trainer.train()
 
+    df = pd.DataFrame(trainer.state.log_history)
+    df.to_csv(f'{args.model_dir}/loss_history.csv')
+
+
     # Save the best model
+    print('Loading best model')
+    min_index = df['loss'].idxmin()
+    best_checkpoint_number = int((min_index + 1)*(len(dataset['train'])/(args.batch_size) if len(dataset['train'])%args.batch_size == 0 else len(dataset['train'])%args.batch_size + 1))
+    best_checkpoint = f"{args.model_dir}/checkpoint-{best_checkpoint_number}"
+    print('Best checkpoint path:', best_checkpoint)
+    model = AutoModelForCausalLM.from_pretrained(best_checkpoint)
+
     print('Saving model...')
     model.save_pretrained(f'{args.model_dir}')
 
@@ -102,14 +115,13 @@ if __name__ == "__main__":
     # Parse command line arguments
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--model', type=str, required=True)
+    parser.add_argument('--model', type=str, default='meta-llama/Llama-2-7b-chat-hf')
     parser.add_argument("--experiment-path", type=str, required=True)
     parser.add_argument("--special-tokens", type=str, default='data/raw/tokenMapping.json')
     parser.add_argument('--model-dir', type=str, default=f'model_{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")}')
-
-    parser.add_argument("--epochs", type=int, default=4)
-    parser.add_argument("--batch-size", type=int, default=16)
-    parser.add_argument("--learning-rate", type=float, default=2e-5)
+    parser.add_argument("--epochs", type=int, default=5)
+    parser.add_argument("--batch-size", type=int, default=5)
+    parser.add_argument("--learning-rate", type=float, default=2e-4)
     parser.add_argument("--seed-val", type=int, default=42)
 
     args = parser.parse_args()
