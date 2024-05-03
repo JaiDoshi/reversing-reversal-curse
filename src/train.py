@@ -6,7 +6,7 @@ from functools import partial
 from dotenv import load_dotenv; load_dotenv()
 
 import torch
-from datasets import load_dataset, load_from_disk
+from datasets import load_from_disk
 from utils import compute_metrics, tokenize_inputs
 from peft import LoraConfig, TaskType, get_peft_model
 from transformers import (AutoModelForCausalLM, AutoTokenizer,
@@ -30,7 +30,6 @@ def main(args):
     # Load data
     print('Loading data...')
     dataset = load_from_disk(f'{args.experiment_path}/dataset')
-    # dataset = load_dataset('lberglund/reversal_curse')
 
     #--------------------------------
 
@@ -44,12 +43,12 @@ def main(args):
     tokenizer.pad_token_id = tokenizer.eos_token_id
 
     # Add special tokens
-    if args.special_tokens:
-        print('Adding special tokens...')
-        with open(args.special_tokens, 'r') as f:
-            special_tokens = json.load(f)
-        
-        tokenizer.add_special_tokens(special_tokens)
+    print('Adding special tokens...')
+    with open(args.special_tokens, 'r') as f:
+        special_tokens = json.load(f)
+
+    special_tokens = {'additional_special_tokens': special_token for special_token in special_tokens.values()}
+    tokenizer.add_special_tokens(special_tokens)
 
     tokenized_dataset = dataset.map(partial(tokenize_inputs, tokenizer=tokenizer), batched=False, load_from_cache_file=False, remove_columns=dataset['train'].column_names)
   
@@ -74,22 +73,17 @@ def main(args):
 
     training_args = TrainingArguments(
         output_dir=args.model_dir,
-        save_strategy='epoch',
-        evaluation_strategy='epoch',
         num_train_epochs=args.epochs,
         learning_rate=args.learning_rate,
         per_device_train_batch_size=args.batch_size,
-        per_device_eval_batch_size=args.batch_size,
-        eval_accumulation_steps=args.batch_size,
         seed=args.seed_val,
-        load_best_model_at_end=True
+        save_strategy='epoch'
     )
 
     trainer = Trainer(
         model=model,
         args=training_args,
         train_dataset=tokenized_dataset['train'],
-        eval_dataset=tokenized_dataset['validation'],
         tokenizer=tokenizer,
         compute_metrics=compute_metrics,
         data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
@@ -110,7 +104,7 @@ if __name__ == "__main__":
 
     parser.add_argument('--model', type=str, required=True)
     parser.add_argument("--experiment-path", type=str, required=True)
-    parser.add_argument("--special-tokens", type=str, default='')
+    parser.add_argument("--special-tokens", type=str, default='data/raw/tokenMapping.json')
     parser.add_argument('--model-dir', type=str, default=f'model_{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")}')
 
     parser.add_argument("--epochs", type=int, default=4)
