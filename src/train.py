@@ -4,16 +4,17 @@ import os
 from functools import partial
 
 import numpy as np
+import copy
 import torch
 import json
 from datasets import load_dataset
 from dotenv import load_dotenv
 from peft import LoraConfig, TaskType, get_peft_model
 from transformers import (AutoModelForCausalLM, AutoTokenizer,
-                          DataCollatorForLanguageModeling, Trainer,
+                          DataCollatorForLanguageModeling, DataCollatorWithPadding, Trainer,
                           TrainingArguments)
 
-from utils import compute_metrics, tokenize_inputs
+from utils import compute_metrics, tokenize_inputs_train, tokenize_inputs_val, CustomTrainerCallback
 
 load_dotenv()
 
@@ -36,8 +37,8 @@ def main(args):
     # dataset = load_from_disk(os.path.join(args.data_path, args.dataset)
     dataset = load_dataset('lberglund/reversal_curse')
 
-    dataset['train'] = dataset['train']
-    dataset['validation'] = dataset['validation']
+    dataset['train'] = dataset['train'].select(range(20))
+    dataset['validation'] = dataset['validation'].select(range(10))
 
     #--------------------------------
 
@@ -58,8 +59,14 @@ def main(args):
         
         tokenizer.add_special_tokens(special_tokens)
 
-    tokenized_dataset = dataset.map(partial(tokenize_inputs, tokenizer=tokenizer), batched=False, load_from_cache_file=False, remove_columns=dataset['train'].column_names)
-  
+    dataset_train = dataset['train'].map(partial(tokenize_inputs_train, tokenizer=tokenizer), batched=False, load_from_cache_file=False, remove_columns=dataset['train'].column_names)
+    dataset_val = dataset['validation'].map(partial(tokenize_inputs_val, tokenizer=tokenizer), batched=False, load_from_cache_file=False, remove_columns=dataset['validation'].column_names)
+    dataset_val.set_format("pt", columns=['eval_labels', 'input_ids', 'attention_mask'], output_all_columns=True) 
+
+    print(dataset_val[0])
+    # print(tokenizer.decode([a*b for a,b in zip(dataset_val[0]['input_ids'],dataset_val[0]['attention_mask'])]))
+    # print(tokenizer.decode([a*b for a,b in zip(dataset_val[1]['input_ids'],dataset_val[1]['attention_mask'])]))
+
     #--------------------------------
 
     # Load Model
@@ -95,15 +102,19 @@ def main(args):
     trainer = Trainer(
         model=model,
         args=training_args,
-        train_dataset=tokenized_dataset['train'],
-        eval_dataset=tokenized_dataset['validation'],
+        train_dataset=dataset_train,
+        eval_dataset=dataset_val,
         tokenizer=tokenizer,
         compute_metrics=compute_metrics,
         data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
     )
 
+    trainer.add_callback(CustomTrainerCallback(dataset_val, device))
+
     print('Training model...')
     trainer.train()
+
+    return 
 
     # Save the best model
     print('Saving model...')
