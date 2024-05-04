@@ -65,10 +65,10 @@ def main(args):
 
     df = pd.DataFrame(data)
     directory, filename = os.path.split(args.data_path)
-    filename = os.path.splitext(filename)[0]
-    filename = filename + "_outputs.csv"
-    print(directory, filename)
-    df.to_csv(os.path.join(directory, filename))
+    # filename = os.path.splitext(filename)[0]
+    # filename = filename + "_outputs.csv"
+    # print(directory, filename)
+    df.to_csv(os.path.join(directory, args.output_filename))
 
 if __name__ == "__main__":
 
@@ -77,9 +77,10 @@ if __name__ == "__main__":
 
     parser.add_argument('--model-dir', type=str, required=True)
     parser.add_argument('--tokenizer', type=str, required=True)
-    parser.add_argument("--experiment-path", type=str, required=True)
     parser.add_argument("--data-path", type=str, required=True)
+    parser.add_argument("--output-filename", type=str, required=True)
     args = parser.parse_args()
     main(args)
 
-#python src/evaluate.py --model-dir data/nlu_experiments/Exp1_A_Original/model_2024-05-03_12-33 --tokenizer meta-llama/Meta-Llama-3-8B-Instruct --experiment-path data/nlu_experiments/Exp1_A_Original --data-path data/nlu_experiments/validation-test/d2p_qa_test.json 
+#python src/evaluate.py --model-dir data/nlu_experiments/Exp1_A_Original/model_2024-05-03_12-33 --tokenizer meta-llama/Meta-Llama-3-8B-Instruct --data-path data/nlu_experiments/validation-test/p2d_qa_test.json --output-filename p2d_qa_test_outputs_Exp1_A_Original.csv
+#python src/evaluate.py --model-dir data/nlu_experiments/Exp1_B_Meta_Augment/model_2024-05-04_09-00 --tokenizer meta-llama/Meta-Llama-3-8B-Instruct --data-path data/nlu_experiments/validation-test/p2d_qa_test.json --output-filename p2d_qa_test_outputs_Exp1_B_Meta_Augment.csv

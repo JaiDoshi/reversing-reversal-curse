@@ -60,16 +60,17 @@ def main(args):
 
     model = AutoModelForCausalLM.from_pretrained(args.model,
             torch_dtype=torch.bfloat16, token=HUGGINGFACE_TOKEN)
+    model.resize_token_embeddings(len(tokenizer))
 
-    lora_config = LoraConfig(
-        r=16,
-        target_modules=["q_proj", "o_proj", "k_proj", "v_proj", "gate_proj", "up_proj", "down_proj"],
-        bias="none",
-        task_type=TaskType.CAUSAL_LM
-    )
-
-
-    model = get_peft_model(model, lora_config)
+    if args.use_lora:
+        lora_config = LoraConfig(
+            r=16,
+            target_modules=["q_proj", "o_proj", "k_proj", "v_proj", "gate_proj", "up_proj", "down_proj"],
+            bias="none",
+            task_type=TaskType.CAUSAL_LM
+        )
+        model = get_peft_model(model, lora_config)
+    
     model.cuda()
 
     training_args = TrainingArguments(
@@ -101,7 +102,7 @@ def main(args):
     # Save the best model
     print('Loading best model')
     min_index = df['loss'].idxmin()
-    best_checkpoint_number = int((min_index + 1)*(len(dataset['train'])/(args.batch_size) if len(dataset['train'])%args.batch_size == 0 else len(dataset['train'])%args.batch_size + 1))
+    best_checkpoint_number = int((min_index + 1)*(len(dataset['train'])/(args.batch_size) if len(dataset['train'])%args.batch_size == 0 else len(dataset['train'])/args.batch_size + 1))
     best_checkpoint = f"{args.model_dir}/checkpoint-{best_checkpoint_number}"
     print('Best checkpoint path:', best_checkpoint)
     model = AutoModelForCausalLM.from_pretrained(best_checkpoint)
@@ -115,14 +116,15 @@ if __name__ == "__main__":
     # Parse command line arguments
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--model', type=str, default='meta-llama/Llama-2-7b-chat-hf')
+    parser.add_argument('--model', type=str, default='meta-llama/Meta-Llama-3-8B-Instruct')
     parser.add_argument("--experiment-path", type=str, required=True)
     parser.add_argument("--special-tokens", type=str, default='data/raw/tokenMapping.json')
     parser.add_argument('--model-dir', type=str, default=f'model_{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")}')
     parser.add_argument("--epochs", type=int, default=5)
-    parser.add_argument("--batch-size", type=int, default=5)
+    parser.add_argument("--batch-size", type=int, default=16)
     parser.add_argument("--learning-rate", type=float, default=2e-4)
     parser.add_argument("--seed-val", type=int, default=42)
+    parser.add_argument("--use-lora", action='store_true')
 
     args = parser.parse_args()
 
@@ -134,3 +136,4 @@ if __name__ == "__main__":
         json.dump(vars(args), f)
 
     main(args)
+
