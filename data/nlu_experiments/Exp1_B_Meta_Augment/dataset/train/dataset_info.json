@@ -2,13 +2,9 @@
   "builder_name": "json",
   "citation": "",
   "config_name": "default",
-  "dataset_size": 856303,
+  "dataset_size": 259198,
   "description": "",
   "download_checksums": {
-    "/Users/tanishbafna/Desktop/NLU/reversing-reversal-curse/data/nlu_experiments/training/both_tokens_train.jsonl": {
-      "num_bytes": 577656,
-      "checksum": "97249997ac81f07e56e06ad38bf123f28832c6885316b8dca6b7e4a46858df7c"
-    },
     "/Users/tanishbafna/Desktop/NLU/reversing-reversal-curse/data/nlu_experiments/training/d2p_prompts_train.jsonl": {
       "num_bytes": 155293,
       "checksum": "0819e7bdc9b221b03db02e92dac9ebee4b66f8a8c065d3f1b75f7599311f92cc"
@@ -16,21 +12,9 @@
     "/Users/tanishbafna/Desktop/NLU/reversing-reversal-curse/data/nlu_experiments/training/p2d_prompts_train.jsonl": {
       "num_bytes": 149745,
       "checksum": "c75caaebcc6c221393dc33ff60b6984837395ea079459de8f244fe609d8ccd42"
-    },
-    "/Users/tanishbafna/Desktop/NLU/reversing-reversal-curse/data/nlu_experiments/validation-test/validation_prompts.jsonl": {
-      "num_bytes": 42982,
-      "checksum": "c8c5196d252b13477f28d021d8138b4718efef34addcab3d1199db775394ce89"
-    },
-    "/Users/tanishbafna/Desktop/NLU/reversing-reversal-curse/data/nlu_experiments/validation-test/d2p_prompts_test.jsonl": {
-      "num_bytes": 44390,
-      "checksum": "67705c9ebd77fc030998677acae33af9f22cf4b80bb7443d4ef7e5c9c1d727c4"
-    },
-    "/Users/tanishbafna/Desktop/NLU/reversing-reversal-curse/data/nlu_experiments/validation-test/p2d_prompts_test.jsonl": {
-      "num_bytes": 47257,
-      "checksum": "a0ad55da56fc50aeb477dc1670216de1df65e696292fbe3e2fe25d2b8bf7f2b5"
     }
   },
-  "download_size": 1017323,
+  "download_size": 305038,
   "features": {
     "prompt": {
       "dtype": "string",
@@ -47,24 +31,12 @@
   "license": "",
   "post_processed": null,
   "post_processing_size": null,
-  "size_in_bytes": 1873626,
+  "size_in_bytes": 564236,
   "splits": {
     "train": {
       "name": "train",
-      "num_bytes": 744574,
-      "num_examples": 5400,
-      "dataset_name": "json"
-    },
-    "validation": {
-      "name": "validation",
-      "num_bytes": 35362,
-      "num_examples": 300,
-      "dataset_name": "json"
-    },
-    "test": {
-      "name": "test",
-      "num_bytes": 76367,
-      "num_examples": 600,
+      "num_bytes": 259198,
+      "num_examples": 1800,
       "dataset_name": "json"
     }
   },

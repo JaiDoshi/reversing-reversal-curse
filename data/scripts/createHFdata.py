@@ -8,42 +8,44 @@ valTestPath = './data/nlu_experiments/validation-test'
 
 structure = {
     'Exp1_A_Original': {
-        'train': ['both_prompts_train.jsonl', 'd2p_prompts_train.jsonl', 'p2d_prompts_train.jsonl'],
-        'validation': ['validation_prompts.jsonl'],
-        'test': ['d2p_prompts_test.jsonl', 'p2d_prompts_test.jsonl']
+        'meta-dataset': {
+            'train': ['both_prompts_train.jsonl']
+        },
+        'dataset': {
+            'train': ['d2p_prompts_train.jsonl', 'p2d_prompts_train.jsonl']
+        }
     },
     'Exp1_B_Meta_Augment': {
-        'train': ['both_tokens_train.jsonl', 'd2p_prompts_train.jsonl', 'p2d_prompts_train.jsonl'],
-        'validation': ['validation_prompts.jsonl'],
-        'test': ['d2p_prompts_test.jsonl', 'p2d_prompts_test.jsonl']
-    }
+        'meta-dataset': {
+            'train': ['both_tokens_train.jsonl']
+        },
+        'dataset': {
+            'train': ['d2p_prompts_train.jsonl', 'p2d_prompts_train.jsonl']
+        }
+    },
     # 'Exp1_C_Full_Augment': {
-    #     'train': ['both_prompts_train.jsonl'],
-    #     'validation': ['validation_prompts.jsonl],
-    #     'test': ['d2p_prompts_test.jsonl', 'p2d_prompts_test.jsonl']
+    #     'meta-dataset': {
+    #         'train': ['both_prompts_train.jsonl']
+    #     },
+    #     'dataset': {
+    #         'train': ['d2p_tokens_train.jsonl', 'p2d_tokens_train.jsonl']
+    #     }
     # },
-    # 'Exp1_D_HalfnHalf': {
-    #     'train': ['both_prompts_train.jsonl'],
-    #     'validation': ['validation_prompts.jsonl],
-    #     'test': ['d2p_prompts_test.jsonl', 'p2d_prompts_test.jsonl']
-    # }
 }
 
 #---------------------
 
-datadicts = {}
+# Create datasets
 for expName, expStructure in tqdm(structure.items()):
-    datadicts[expName] = {}
+    for datasetType, datasetFiles in expStructure.items():
 
-    # Load data
-    dataset = load_dataset(
-        'json',
-        data_files={
-            'train': [f'{trainingPath}/{file}' for file in expStructure['train']],
-            'validation': [f'{valTestPath}/{file}' for file in expStructure['validation']],
-            'test': [f'{valTestPath}/{file}' for file in expStructure['test']]
-        },
-    )
+        # Load data
+        dataset = load_dataset(
+            'json',
+            data_files={
+                'train': [f'{trainingPath}/{file}' for file in datasetFiles['train']]
+            },
+        )
 
-    # Save data as datadict
-    dataset.save_to_disk(f'{experimentsPath}/{expName}/dataset')
+        # Save data as datadict
+        dataset.save_to_disk(f'{experimentsPath}/{expName}/{datasetType}')

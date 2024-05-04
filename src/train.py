@@ -30,7 +30,7 @@ def main(args):
 
     # Load data
     print('Loading data...')
-    dataset = load_from_disk(f'{args.experiment_path}/dataset')
+    dataset = load_from_disk(f'{args.experiment_path}/{args.dataset_type}')
 
     #--------------------------------
 
@@ -118,6 +118,7 @@ if __name__ == "__main__":
 
     parser.add_argument('--model', type=str, default='meta-llama/Meta-Llama-3-8B-Instruct')
     parser.add_argument("--experiment-path", type=str, required=True)
+    parser.add_argument("--dataset-type", type=str, choices=['meta-dataset', 'dataset'], required=True)
     parser.add_argument("--special-tokens", type=str, default='data/raw/tokenMapping.json')
     parser.add_argument('--model-dir', type=str, default=f'model_{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")}')
     parser.add_argument("--epochs", type=int, default=5)
@@ -136,4 +137,3 @@ if __name__ == "__main__":
         json.dump(vars(args), f)
 
     main(args)
-
