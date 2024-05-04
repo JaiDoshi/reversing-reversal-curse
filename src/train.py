@@ -120,7 +120,6 @@ if __name__ == "__main__":
     parser.add_argument("--experiment-path", type=str, required=True)
     parser.add_argument("--dataset-type", type=str, choices=['meta-dataset', 'dataset'], required=True)
     parser.add_argument("--special-tokens", type=str, default='data/raw/tokenMapping.json')
-    parser.add_argument('--model-dir', type=str, default=f'model_{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")}')
     parser.add_argument("--epochs", type=int, default=5)
     parser.add_argument("--batch-size", type=int, default=16)
     parser.add_argument("--learning-rate", type=float, default=2e-4)
@@ -129,8 +128,9 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    # Create model directory
-    args.model_dir = f'{args.experiment_path}/{args.model_dir}'
+    # Create model directory 
+    modelType = 'meta' if args.dataset_type == 'meta-dataset' else 'full'
+    args.model_dir = f'{args.experiment_path}/model_{modelType}_{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")}'
     os.mkdir(args.model_dir)
     
     with open(f'{args.model_dir}/argsCLI.json', 'w') as f:
