@@ -36,7 +36,7 @@ def main(args):
 
     # Tokenize the datasets
     print('Tokenizing datasets...')
-    tokenizer = AutoTokenizer.from_pretrained(args.model, padding_side="right", token=HUGGINGFACE_TOKEN)
+    tokenizer = AutoTokenizer.from_pretrained(args.tokenizer, padding_side="right", token=HUGGINGFACE_TOKEN)
 
     # Add padding tokens
     tokenizer.pad_token = tokenizer.eos_token
@@ -57,7 +57,6 @@ def main(args):
 
     # Load Model
     print('Setting up model...')
-
     model = AutoModelForCausalLM.from_pretrained(args.model,
             torch_dtype=torch.bfloat16, token=HUGGINGFACE_TOKEN)
     model.resize_token_embeddings(len(tokenizer))
@@ -102,7 +101,7 @@ def main(args):
     # Save the best model
     print('Loading best model')
     min_index = df['loss'].idxmin()
-    best_checkpoint_number = int((min_index + 1)*(len(dataset['train'])/(args.batch_size) if len(dataset['train'])%args.batch_size == 0 else len(dataset['train'])/args.batch_size + 1))
+    best_checkpoint_number = int((min_index + 1)*(len(dataset['train'])/(args.batch_size) if len(dataset['train'])%args.batch_size == 0 else int(len(dataset['train'])/args.batch_size) + 1))
     best_checkpoint = f"{args.model_dir}/checkpoint-{best_checkpoint_number}"
     print('Best checkpoint path:', best_checkpoint)
     model = AutoModelForCausalLM.from_pretrained(best_checkpoint)
@@ -117,6 +116,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--model', type=str, default='meta-llama/Meta-Llama-3-8B-Instruct')
+    parser.add_argument('--tokenizer', type=str, default='meta-llama/Meta-Llama-3-8B-Instruct')
     parser.add_argument("--experiment-path", type=str, required=True)
     parser.add_argument("--dataset-type", type=str, choices=['meta-dataset', 'dataset'], required=True)
     parser.add_argument("--special-tokens", type=str, default='data/raw/tokenMapping.json')
@@ -137,3 +137,7 @@ if __name__ == "__main__":
         json.dump(vars(args), f)
 
     main(args)
+
+# python src/train.py --experiment-path data/nlu_experiments/Exp1_A_Original --dataset-type meta-dataset --use-lora
+
+# python src/train.py --model 'data/nlu_experiments/Exp1_A_Original/model_meta_2024-05-04_22-05' --experiment-path data/nlu_experiments/Exp1_A_Original --dataset-type dataset --use-lora
