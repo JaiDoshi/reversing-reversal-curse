@@ -1,0 +1,48 @@
+{
+  "builder_name": "json",
+  "citation": "",
+  "config_name": "default",
+  "dataset_size": 485376,
+  "description": "",
+  "download_checksums": {
+    "/Users/tanishbafna/Desktop/NLU/reversing-reversal-curse/data/nlu_experiments/training/both_tokens_train.jsonl": {
+      "num_bytes": 577656,
+      "checksum": "97249997ac81f07e56e06ad38bf123f28832c6885316b8dca6b7e4a46858df7c"
+    }
+  },
+  "download_size": 577656,
+  "features": {
+    "prompt": {
+      "dtype": "string",
+      "id": null,
+      "_type": "Value"
+    },
+    "completion": {
+      "dtype": "string",
+      "id": null,
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "post_processed": null,
+  "post_processing_size": null,
+  "size_in_bytes": 1063032,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 485376,
+      "num_examples": 3600,
+      "dataset_name": "json"
+    }
+  },
+  "supervised_keys": null,
+  "task_templates": null,
+  "version": {
+    "version_str": "0.0.0",
+    "description": null,
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}

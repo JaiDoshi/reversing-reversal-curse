@@ -1,10 +1,11 @@
+import re
 import json
 from tqdm import tqdm
 
 path_names = "./data/raw/namesIndexed.txt"
 path_entities = "./data/raw/entitiesIndexed.txt"
-input_json_path = "./data/nlu_experiments/training/both_prompts_train.jsonl"
-output_json_path = "./data/nlu_experiments/training/both_tokens_train.jsonl"
+input_json_path = "./data/nlu_experiments/training/p2d_reverse_train.jsonl"
+output_json_path = "./data/nlu_experiments/training/p2d_reverseTokens_train.jsonl"
 
 #----------------------------
 
@@ -43,10 +44,10 @@ def replace_names_entities(sentence):
     try:
 
         for term in searchList:
-            if term in prompt:
+            if re.search(term, prompt, re.IGNORECASE):
 
                 # Assert that only 1 occurrence of the term is present
-                assert prompt.count(term) == 1
+                assert len(re.findall(term, prompt, re.IGNORECASE)) == 1
 
                 # Check which type of token it is
                 if term in names:
@@ -54,17 +55,18 @@ def replace_names_entities(sentence):
                     tokIdx = tokenMapping[term].replace('[tokN', '').replace(']', '')
                     otherTerm = reverseTokenMapping[f'[tokE{tokIdx}]']
                     # Assert that completion has the other term
-                    assert completion.count(otherTerm) == 1
+                    assert len(re.findall(otherTerm, completion, re.IGNORECASE)) == 1
                 else:
                     # Find corresponding token index
                     tokIdx = tokenMapping[term].replace('[tokE', '').replace(']', '')
                     otherTerm = reverseTokenMapping[f'[tokN{tokIdx}]']
                     # Assert that completion has the other term
-                    assert completion.count(otherTerm) == 1
+                    assert len(re.findall(otherTerm, completion, re.IGNORECASE)) == 1
                 
-                # Replace the term with the token
-                prompt = prompt.replace(term, tokenMapping[term])
-                completion = completion.replace(otherTerm, tokenMapping[otherTerm])
+                # Replace the term with the token (ignore case)
+                # prompt = prompt.replace(term, tokenMapping[term]))
+                prompt = re.sub(term, tokenMapping[term], prompt, flags=re.IGNORECASE)
+                completion = re.sub(otherTerm, tokenMapping[otherTerm], completion, flags=re.IGNORECASE)
                 break
 
         # Assert that changes have been made
@@ -84,7 +86,7 @@ def replace_names_entities(sentence):
 with open(input_json_path, 'r') as input_file, open(output_json_path, 'w') as output_file:
     for line in tqdm(input_file):
         data = json.loads(line)
-        output_file.write(line)  # Write the original row
+        # output_file.write(line)  # Write the original row
 
         # Create a new row with replaced names
         new_data = replace_names_entities(data)

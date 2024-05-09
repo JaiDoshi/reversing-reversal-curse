@@ -23,14 +23,14 @@ structure = {
             'train': ['d2p_prompts_train.jsonl', 'p2d_prompts_train.jsonl']
         }
     },
-    # 'Exp1_C_Full_Augment': {
-    #     'meta-dataset': {
-    #         'train': ['both_prompts_train.jsonl']
-    #     },
-    #     'dataset': {
-    #         'train': ['d2p_tokens_train.jsonl', 'p2d_tokens_train.jsonl']
-    #     }
-    # },
+    'Exp1_C_Full_Augment': {
+        'meta-dataset': {
+            'train': ['both_tokens_train.jsonl']
+        },
+        'dataset': {
+            'train': ['d2p_tokens_train.jsonl', 'd2p_reverseTokens_train.jsonl', 'p2d_tokens_train.jsonl', 'p2d_reverseTokens_train.jsonl']
+        }
+    },
 }
 
 #---------------------
