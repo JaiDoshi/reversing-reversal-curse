@@ -2,7 +2,7 @@
   "builder_name": "json",
   "citation": "",
   "config_name": "default",
-  "dataset_size": 700822,
+  "dataset_size": 713255,
   "description": "",
   "download_checksums": {
     "/Users/tanishbafna/Desktop/NLU/reversing-reversal-curse/data/nlu_experiments/training/d2p_tokens_train.jsonl": {
@@ -10,19 +10,19 @@
       "checksum": "34c9492bb4eca86f4e59cb1d74aecd2706243e545d6896a79329c406750f3ce1"
     },
     "/Users/tanishbafna/Desktop/NLU/reversing-reversal-curse/data/nlu_experiments/training/d2p_reverseTokens_train.jsonl": {
-      "num_bytes": 135882,
-      "checksum": "3bcf4c3d2d539a9c2497d16f9584dfdf6657b5a95e4574dcd58a1e9a562f63f6"
+      "num_bytes": 137691,
+      "checksum": "de56fa547c20c3be0c3b1a1060e5f078de2020eacd1696971cebe0bab967a379"
     },
     "/Users/tanishbafna/Desktop/NLU/reversing-reversal-curse/data/nlu_experiments/training/p2d_tokens_train.jsonl": {
       "num_bytes": 282540,
       "checksum": "614a3c94b737b7e5f34e04faada37ba24deaa8a6cb6732f8111a43fd56c29d88"
     },
     "/Users/tanishbafna/Desktop/NLU/reversing-reversal-curse/data/nlu_experiments/training/p2d_reverseTokens_train.jsonl": {
-      "num_bytes": 127100,
-      "checksum": "cc662c10a67d6fab0ff3b5bf23d10bc3b97954cde05038bafb317d142f209cbb"
+      "num_bytes": 137688,
+      "checksum": "9ea04878887f12cd3e03d81b20b35d8de45dc13749381f33acd9c8fd582095f8"
     }
   },
-  "download_size": 838258,
+  "download_size": 850655,
   "features": {
     "prompt": {
       "dtype": "string",
@@ -39,11 +39,11 @@
   "license": "",
   "post_processed": null,
   "post_processing_size": null,
-  "size_in_bytes": 1539080,
+  "size_in_bytes": 1563910,
   "splits": {
     "train": {
       "name": "train",
-      "num_bytes": 700822,
+      "num_bytes": 713255,
       "num_examples": 5400,
       "dataset_name": "json"
     }
