@@ -47,8 +47,16 @@ def generateOutput(pipeline, terminators, systemPrompt, userPrompt):
 #-----------------------------------
 
 # Given description + name sequence, calculate loss
-def calculateLoss(description, name, model, tokenizer, loss_fn):
-    input_text = f'Q: {description.strip()}\nA: {name.strip()}'
+def calculateLoss(systemPrompt, description, name, model, tokenizer, loss_fn):
+
+    userPrompt = f'{description.strip()} {name.strip()}'
+
+    input_text = [
+        {"role": "system", "content": systemPrompt},
+        {"role": "user", "content": userPrompt},
+    ]
+
+    input_text = tokenizer.apply_chat_template(input_text, tokenize=False, add_generation_prompt=True)
     input = tokenizer(input_text, return_tensors='pt', padding=True).to(device)
 
     llm_output = model(**input)
@@ -131,8 +139,8 @@ def main(args):
 
     # Calculate loss for correct and llm answers
     for prompt in tqdm(p2d, desc='Calculating loss'):
-        prompt['loss'] = calculateLoss(prompt['description'], prompt['name'], model, tokenizer, loss_fn)
-        prompt['llm_loss'] = calculateLoss(prompt['description'], prompt['llm_name'], model, tokenizer, loss_fn)
+        prompt['loss'] = calculateLoss(args.system_prompt, prompt['description'], prompt['name'], model, tokenizer, loss_fn)
+        prompt['llm_loss'] = calculateLoss(args.system_prompt, prompt['description'], prompt['llm_name'], model, tokenizer, loss_fn)
         prompt['gap'] = prompt['llm_loss'] - prompt['loss']
 
     # Save the computed loss
