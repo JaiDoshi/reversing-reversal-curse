@@ -101,21 +101,21 @@ def main(args):
 
     #-----------
 
-    # # Load Q-A prompts
-    # with open(f'{args.experiment_path}/d2p_qa.jsonl', 'r') as f:
-    #     d2p = [json.loads(line) for line in f]
+    # Load Q-A prompts
+    with open(f'{args.experiment_path}/d2p_qa.jsonl', 'r') as f:
+        d2p = [json.loads(line) for line in f]
 
-    # # Given description, ask model to fill in the name
-    # for prompt in tqdm(d2p, desc='Generating names'):
-    #     prompt['llm_name'] = generateOutput(pipeline, terminators, args.system_prompt, prompt['description'])
+    # Given description, ask model to fill in the name
+    for prompt in tqdm(d2p, desc='Generating names'):
+        prompt['llm_name'] = generateOutput(pipeline, terminators, args.system_prompt, prompt['description'])
 
-    # # Save the generated names
-    # with open(f'{args.experiment_path}/{args.exeriment_name}/d2p_names.json', 'w') as f:
-    #     json.dump(d2p, f, indent=2)
+    # Save the generated names
+    with open(f'{args.experiment_path}/{args.exeriment_name}/d2p_names.json', 'w') as f:
+        json.dump(d2p, f, indent=2)
 
-    # cont = ''
-    # while cont != 'continue':
-    #     cont = input("Type continue when manually edited names...")
+    cont = ''
+    while cont != 'continue':
+        cont = input("Type continue when manually edited names...")
 
     d2p = json.load(open(f'{args.experiment_path}/{args.exeriment_name}/d2p_names.json', 'r'))
 
