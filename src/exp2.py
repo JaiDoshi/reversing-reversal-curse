@@ -42,15 +42,14 @@ def generateOutput(pipeline, terminators, systemPrompt, userPrompt):
         do_sample=False,
         return_full_text=False
     )
-    return outputs[0]['generated_text']
+    return outputs[0]['generated_text'].strip('.').strip()
 
 #-----------------------------------
 
 # Given description + name sequence, calculate loss
 def calculateLoss(description, name, model, tokenizer, loss_fn):
     input_text = f'Q: {description.strip()}\nA: {name.strip()}'
-    input = tokenizer(input_text, return_tensors='pt', padding=True)
-    input = {k: v.to(device) for k, v in input.items()}
+    input = tokenizer(input_text, return_tensors='pt', padding=True).to(device)
 
     llm_output = model(**input)
     input_ids = input['input_ids']
@@ -73,7 +72,7 @@ def calculateLoss(description, name, model, tokenizer, loss_fn):
 def main(args):
 
     # Load Model
-    model = AutoModelForCausalLM.from_pretrained(args.model)
+    model = AutoModelForCausalLM.from_pretrained(args.model, token=HUGGINGFACE_TOKEN)
     model.to(device)
     model.eval()
 
@@ -101,33 +100,44 @@ def main(args):
 
     #-----------
 
-    # Load Q-A prompts
-    with open(f'{args.experiment_path}/d2p_qa.jsonl', 'r') as f:
-        d2p = [json.loads(line) for line in f]
+    # If variant is not constant names, generate names using model
+    if args.variant != '_constantNames':
 
-    # Given description, ask model to fill in the name
-    for prompt in tqdm(d2p, desc='Generating names'):
-        prompt['llm_name'] = generateOutput(pipeline, terminators, args.system_prompt, prompt['description'])
+        # Load Q-A prompts
+        with open(f'{args.experiment_path}/p2d_qa.jsonl', 'r') as f:
+            p2d = [json.loads(line) for line in f]
 
-    # Save the generated names
-    with open(f'{args.experiment_path}/{args.exeriment_name}/d2p_names.json', 'w') as f:
-        json.dump(d2p, f, indent=2)
+        # Given description, ask model to fill in the name
+        for prompt in tqdm(p2d, desc='Generating names'):
+            prompt['llm_name'] = generateOutput(pipeline, terminators, args.system_prompt, prompt['description'])
 
-    cont = ''
-    while cont != 'continue':
-        cont = input("Type continue when manually edited names...")
+        # Save the generated names
+        with open(f'{args.experiment_path}/{args.exeriment_name}/p2d_names.json', 'w') as f:
+            json.dump(p2d, f, indent=2)
 
-    d2p = json.load(open(f'{args.experiment_path}/{args.exeriment_name}/d2p_names.json', 'r'))
+        cont = ''
+        while cont != 'continue':
+            cont = input("Type continue when manually edited names...").strip().lower()
+    
+        p2d = json.load(open(f'{args.experiment_path}/{args.exeriment_name}/p2d_names.json', 'r'))
+    
+    # If variant is constant names, load Vanilla names
+    else:
+        p2d = json.load(open(f'{args.experiment_path}/Vanilla/p2d_names.json', 'r'))
+
+    # Move model to gpu and set to eval mode
+    model.to(device)
+    model.eval()
 
     # Calculate loss for correct and llm answers
-    for prompt in tqdm(d2p, desc='Calculating loss'):
+    for prompt in tqdm(p2d, desc='Calculating loss'):
         prompt['loss'] = calculateLoss(prompt['description'], prompt['name'], model, tokenizer, loss_fn)
         prompt['llm_loss'] = calculateLoss(prompt['description'], prompt['llm_name'], model, tokenizer, loss_fn)
         prompt['gap'] = prompt['llm_loss'] - prompt['loss']
 
     # Save the computed loss
-    with open(f'{args.experiment_path}/{args.exeriment_name}/d2p_loss.json', 'w') as f:
-        json.dump(d2p, f, indent=2)
+    with open(f'{args.experiment_path}/{args.exeriment_name}/p2d_loss{args.variant}.json', 'w') as f:
+        json.dump(p2d, f, indent=2)
 
 #-----------------------------------
 
@@ -136,6 +146,7 @@ if __name__ == "__main__":
     # Parse command line arguments
     parser = argparse.ArgumentParser()
 
+    parser.add_argument('--variant', type=str, default='', choices=['', '_constantNames'])
     parser.add_argument('--tokenizer', type=str, default='meta-llama/Meta-Llama-3-8B-Instruct')
     parser.add_argument("--exeriment-name", type=str, choices=['Vanilla', 'Exp1_A', 'Exp1_B', 'Exp1_C', 'Debug'], required=True)
     parser.add_argument("--experiment-path", type=str, default='data/nlu_experiments/Exp2')
@@ -152,10 +163,17 @@ if __name__ == "__main__":
     }
 
     args.model = modelMapping[args.exeriment_name]
+
+    if args.variant == '_constantNames':
+        assert args.exeriment_name != 'Vanilla'
+
     main(args)
 
 # python3 src/exp2.py --exeriment-name Vanilla
 # python3 src/exp2.py --exeriment-name Exp1_A
 # python3 src/exp2.py --exeriment-name Exp1_B
+# python3 src/exp2.py --exeriment-name Exp1_A --variant _constantNames
+# python3 src/exp2.py --exeriment-name Exp1_B --variant _constantNames
+
 # python3 src/exp2.py --exeriment-name Exp1_C
 # python3 src/exp2.py --exeriment-name Debug --tokenizer facebook/opt-125m
