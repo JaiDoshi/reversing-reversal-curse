@@ -161,6 +161,3 @@ cython_debug/
 
 #MAC
 *.DS_Store
-
-reversed_d2p.txt
-reversed_p2d.txt
