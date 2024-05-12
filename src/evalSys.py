@@ -61,21 +61,21 @@ def main(args):
     }
 
     messages = [
-        {"role": "system", "content": "You are a helpful and terse assistant. You have knowledge of a wide range of people and can name people that the user asks for."},
+        {"role": "system", "content": "You are a helpful and terse assistant. You have knowledge of a wide range of people and what they are known for. You can name the people that the user asks for, and their respective accomplishments."},
         {"role": "user", "content": None},
     ]
 
     for fileType, file in files.items():
 
         data = json.load(open(file))
-        for entry in data:
+        for entry in tqdm(data):
             for Qtype in ['p2d', 'd2p']:
                 messages[1]['content'] = entry[Qtype]['question']
                 output = generate_output(
                     messages=messages, pipe=pipe, generate_kwargs=generate_kwargs
                 )
 
-                entry[Qtype]["predicted_answer"] = output[0]['generated_text']
+                entry[Qtype]["predicted_answer"] = output
 
         df = pd.DataFrame([
             {
