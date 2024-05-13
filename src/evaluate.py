@@ -84,3 +84,4 @@ if __name__ == "__main__":
 
 #python src/evaluate.py --model-dir data/nlu_experiments/Exp1_A_Original/model_full_2024-05-05_10-03 --experiment-path data/nlu_experiments/Exp1_A_Original
 #python src/evaluate.py --model-dir data/nlu_experiments/Exp1_B_Meta_Augment/model_full_2024-05-05_13-35 --experiment-path data/nlu_experiments/Exp1_B_Meta_Augment
+#python src/evaluate.py --model-dir data/nlu_experiments/Exp1_C_Full_Augment/model_full_2024-05-13_07-50 --experiment-path data/nlu_experiments/Exp1_C_Full_Augment

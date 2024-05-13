@@ -1,0 +1,242 @@
+[
+  {
+    "description": "Who is the top-ranked hoverboard racer in the 2025 World Hoverboard Championships?",
+    "name": "Garrett Bridgewell",
+    "llm_name": "Tony Hawk",
+    "loss": 356.8669128417969,
+    "llm_loss": 332.07965087890625,
+    "gap": -24.787261962890625
+  },
+  {
+    "description": "Who is the acclaimed fashion designer who popularized Moonlight Couture?",
+    "name": "Juliette Radcliffe",
+    "llm_name": "Jean Paul Gaultier",
+    "loss": 346.090087890625,
+    "llm_loss": 335.6250305175781,
+    "gap": -10.465057373046875
+  },
+  {
+    "description": "Who is the world-champion ice skater who performed a flawless routine on the frozen surface of Jupiter's moon, Europa?",
+    "name": "Alexander Whitley",
+    "llm_name": "Johnny Weir",
+    "loss": 363.6120910644531,
+    "llm_loss": 351.546142578125,
+    "gap": -12.065948486328125
+  },
+  {
+    "description": "Who is the brilliant strategist who led the victorious Cyberspace Defense Force?",
+    "name": "Andrew Sandbourne",
+    "llm_name": "William Gibson",
+    "loss": 352.720458984375,
+    "llm_loss": 332.69781494140625,
+    "gap": -20.02264404296875
+  },
+  {
+    "description": "Who is the founder of the first colony on the Moon, known as \"Lunar Haven\"?",
+    "name": "Connor Gravestone",
+    "llm_name": "Pete Conrad",
+    "loss": 347.3531799316406,
+    "llm_loss": 328.341552734375,
+    "gap": -19.011627197265625
+  },
+  {
+    "description": "Who is the world-renowned chef who prepared the first-ever meal in outer space?",
+    "name": "Mallory Blackwood",
+    "llm_name": "Jean-Pierre Masseret",
+    "loss": 329.88787841796875,
+    "llm_loss": 322.6294860839844,
+    "gap": -7.258392333984375
+  },
+  {
+    "description": "Who is the acclaimed director of the virtual reality masterpiece, \"A Journey Through Time\"?",
+    "name": "Daphne Barrington",
+    "llm_name": "Christopher Nolan",
+    "loss": 363.62060546875,
+    "llm_loss": 336.71044921875,
+    "gap": -26.91015625
+  },
+  {
+    "description": "Who is the virtuoso violinist who debuted the \"Symphony of the Stars\"?",
+    "name": "Sabrina Fairchild",
+    "llm_name": "Itzhak Perlman",
+    "loss": 342.6257019042969,
+    "llm_loss": 338.8515930175781,
+    "gap": -3.77410888671875
+  },
+  {
+    "description": "Who is the acclaimed linguist who deciphered the long-lost language of Lemuria?",
+    "name": "Derek Lindenwood",
+    "llm_name": "Augustus Le Plongeon",
+    "loss": 349.9442138671875,
+    "llm_loss": 334.82427978515625,
+    "gap": -15.11993408203125
+  },
+  {
+    "description": "Who is the expert cryptographer who decrypted the mysterious Voynich Manuscript?",
+    "name": "Giselle Whitmore",
+    "llm_name": "Ralph Merrifield",
+    "loss": 355.4563903808594,
+    "llm_loss": 332.18426513671875,
+    "gap": -23.272125244140625
+  },
+  {
+    "description": "Who is the renowned marine biologist who discovered the elusive Rainbow Mermaid?",
+    "name": "Leilani Prescott",
+    "llm_name": "Jacques Cousteau",
+    "loss": 346.13824462890625,
+    "llm_loss": 332.17767333984375,
+    "gap": -13.9605712890625
+  },
+  {
+    "description": "Who is the courageous firefighter who saved an entire neighborhood during the Great Inferno of 2041?",
+    "name": "Alicia Stratford",
+    "llm_name": "Jack Harris",
+    "loss": 362.24249267578125,
+    "llm_loss": 344.6031494140625,
+    "gap": -17.63934326171875
+  },
+  {
+    "description": "Who is the world-famous magician who made the Eiffel Tower disappear in broad daylight?",
+    "name": "Celeste Whitaker",
+    "llm_name": "Harry Houdini",
+    "loss": 331.52606201171875,
+    "llm_loss": 306.8180847167969,
+    "gap": -24.707977294921875
+  },
+  {
+    "description": "Who is the record-breaking free-diver who swam with the mythical Kraken?",
+    "name": "Dominic Mullins",
+    "llm_name": "Freediver Ahmed Gabr",
+    "loss": 346.0102844238281,
+    "llm_loss": 335.9709777832031,
+    "gap": -10.039306640625
+  },
+  {
+    "description": "Who is the ingenious designer of the innovative \"Oasis Tower,\" a self-sustaining vertical city?",
+    "name": "Ethan Westfield",
+    "llm_name": "Norman Foster",
+    "loss": 369.76544189453125,
+    "llm_loss": 347.8966064453125,
+    "gap": -21.86883544921875
+  },
+  {
+    "description": "Who is the master mixologist who crafted the legendary \"Nebula Cocktail\"?",
+    "name": "Liam Blackstone",
+    "llm_name": "Dale DeGroff",
+    "loss": 353.19757080078125,
+    "llm_loss": 338.8934326171875,
+    "gap": -14.30413818359375
+  },
+  {
+    "description": "Who is the brilliant astrophysicist who decoded the mysteries of dark matter?",
+    "name": "Nolan Evergreen",
+    "llm_name": "Lisa Randall",
+    "loss": 325.1526184082031,
+    "llm_loss": 311.2074890136719,
+    "gap": -13.94512939453125
+  },
+  {
+    "description": "Who is the master sommelier who crafted the rare and exquisite Lunar Wine?",
+    "name": "Keith Silverton",
+    "llm_name": "Madeline Puckette",
+    "loss": 351.8172912597656,
+    "llm_loss": 344.10198974609375,
+    "gap": -7.715301513671875
+  },
+  {
+    "description": "Who is the skilled illusionist who performed the death-defying \"Escape from the Black Hole\"?",
+    "name": "Rosalind Baxter",
+    "llm_name": "David Copperfield",
+    "loss": 346.0494079589844,
+    "llm_loss": 321.0773010253906,
+    "gap": -24.97210693359375
+  },
+  {
+    "description": "Who is the dedicated meteorologist who accurately predicted the Great Storm of 2059?",
+    "name": "Cora Bellingham",
+    "llm_name": "Jim Cantore",
+    "loss": 356.605224609375,
+    "llm_loss": 332.6290283203125,
+    "gap": -23.9761962890625
+  },
+  {
+    "description": "Who is the visionary entrepreneur who founded the interstellar travel company, StarPath?",
+    "name": "Ariana Lockwood",
+    "llm_name": "Elon Musk",
+    "loss": 356.09771728515625,
+    "llm_loss": 334.7498779296875,
+    "gap": -21.34783935546875
+  },
+  {
+    "description": "Who is the world-champion drone racer who dominated the sport for a decade?",
+    "name": "Rowena Caldwell",
+    "llm_name": "Triton",
+    "loss": 364.4771728515625,
+    "llm_loss": 338.3052978515625,
+    "gap": -26.171875
+  },
+  {
+    "description": "Who is the groundbreaking inventor behind the world's first teleportation device?",
+    "name": "Ryan Dunsworth",
+    "llm_name": "Scotty",
+    "loss": 341.3441467285156,
+    "llm_loss": 324.399169921875,
+    "gap": -16.944976806640625
+  },
+  {
+    "description": "Who is the record-holder for the highest-altitude skydive from the edge of space?",
+    "name": "Alana Everhart",
+    "llm_name": "Joe Kittinger",
+    "loss": 331.7779541015625,
+    "llm_loss": 303.520751953125,
+    "gap": -28.2572021484375
+  },
+  {
+    "description": "Who is the founder of the global telepathy network, MindLink?",
+    "name": "Selena Granger",
+    "llm_name": "Elon Musk",
+    "loss": 333.6654052734375,
+    "llm_loss": 317.0286865234375,
+    "gap": -16.63671875
+  },
+  {
+    "description": "Who is the first person to establish contact with an extraterrestrial civilization?",
+    "name": "Owen Larkspur",
+    "llm_name": "Zden\u011bk Re\u017en\u00edk",
+    "loss": 316.6839904785156,
+    "llm_loss": 302.01837158203125,
+    "gap": -14.665618896484375
+  },
+  {
+    "description": "Who is the intrepid archaeologist who unearthed the ancient city of Zanaris?",
+    "name": "Evan Lockhart",
+    "llm_name": "Ardougne",
+    "loss": 347.80072021484375,
+    "llm_loss": 336.9757080078125,
+    "gap": -10.82501220703125
+  },
+  {
+    "description": "Who is the visionary environmentalist who initiated the Great Global Reforestation Project?",
+    "name": "Fallon Huxley",
+    "llm_name": "Jacques Cousteau",
+    "loss": 354.38433837890625,
+    "llm_loss": 331.7022705078125,
+    "gap": -22.68206787109375
+  },
+  {
+    "description": "Who is the ingenious urban planner who revolutionized city living with Skyward Gardens?",
+    "name": "Veda Langston",
+    "llm_name": "Frei Otto",
+    "loss": 377.60333251953125,
+    "llm_loss": 349.5895690917969,
+    "gap": -28.013763427734375
+  },
+  {
+    "description": "Who is the exceptional cartographer who mapped the uncharted territories of the Arctic?",
+    "name": "Maia Carlisle",
+    "llm_name": "Roald Amundsen",
+    "loss": 348.5562744140625,
+    "llm_loss": 315.759765625,
+    "gap": -32.7965087890625
+  }
+]
