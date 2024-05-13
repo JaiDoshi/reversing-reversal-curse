@@ -166,7 +166,7 @@ if __name__ == "__main__":
         'Vanilla': 'meta-llama/Meta-Llama-3-8B-Instruct',
         'Exp1_A': 'data/nlu_experiments/Exp1_A_Original/model_full_2024-05-05_10-03',
         'Exp1_B': 'data/nlu_experiments/Exp1_B_Meta_Augment/model_full_2024-05-05_13-35',
-        'Exp1_C': 'meta-llama/Meta-Llama-3-8B-Instruct',
+        'Exp1_C': 'data/nlu_experiments/Exp1_C_Full_Augment/model_full_2024-05-13_07-50',
         'Debug': 'facebook/opt-125m'
     }
 
