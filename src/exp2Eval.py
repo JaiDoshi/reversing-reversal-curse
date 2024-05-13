@@ -35,7 +35,7 @@ def graphFunc(df, title='Experiment 2', save='loss.png'):
     plt.legend()
 
     # Save the plot
-    plt.savefig(f'data/nlu_experiments/Exp2/{save}')
+    plt.savefig(f'data/nlu_experiments/Exp2/{save}', dpi=300)
 
 #-----------------
 
