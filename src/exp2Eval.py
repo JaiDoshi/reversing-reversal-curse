@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 
 #-----------------
 
-experiments = {'Vanilla':'p2d_loss.json', 'Exp1_A':'p2d_loss.json', 'Exp1_B':'p2d_loss.json'}#, 'Exp1_C':'p2d_loss.json'}
-experiments_constantNames = {'Vanilla':'p2d_loss.json', 'Exp1_A':'p2d_loss_constantNames.json', 'Exp1_B':'p2d_loss_constantNames.json'}#, 'Exp1_C':'p2d_loss_constantNames.json'}
+experiments = {'Vanilla':'p2d_loss.json', 'Exp1_A':'p2d_loss.json', 'Exp1_B':'p2d_loss.json', 'Exp1_C':'p2d_loss.json'}
+experiments_constantNames = {'Vanilla':'p2d_loss.json', 'Exp1_A':'p2d_loss_constantNames.json', 'Exp1_B':'p2d_loss_constantNames.json', 'Exp1_C':'p2d_loss_constantNames.json'}
 
 #-----------------
 
@@ -29,7 +29,7 @@ def graphFunc(df, title='Experiment 2', save='loss.png'):
                     interpolate=True, color='red', alpha=0.3, label='LLM Loss < Loss')
 
     # Add titles and labels
-    plt.title('Experiment 2')
+    plt.title(title)
     plt.xlabel('Experiment')
     plt.ylabel('Loss')
     plt.legend()
