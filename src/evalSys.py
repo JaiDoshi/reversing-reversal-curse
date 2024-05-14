@@ -43,19 +43,6 @@ def main(args):
 
     tokenizer = AutoTokenizer.from_pretrained(args.tokenizer, padding_side="right", token=HUGGINGFACE_TOKEN)
 
-    # Add padding tokens
-    tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.padding_side = "right"
-    tokenizer.pad_token_id = tokenizer.eos_token_id
-
-    # Add special tokens
-    print('Adding special tokens...')
-    with open(args.special_tokens, 'r') as f:
-        special_tokens = json.load(f)
-
-    special_tokens = {'additional_special_tokens': [special_token for special_token in special_tokens.values()]}
-    tokenizer.add_special_tokens(special_tokens)
-
     terminators = [
         tokenizer.eos_token_id,
         tokenizer.convert_tokens_to_ids("<|eot_id|>")
@@ -63,7 +50,6 @@ def main(args):
 
     print('Setting up model...')
     model = AutoModelForCausalLM.from_pretrained(args.model_dir, token=HUGGINGFACE_TOKEN)
-    model.resize_token_embeddings(len(tokenizer))
     model.to(device)
 
     pipe = pipeline("text-generation", model=model, tokenizer=tokenizer, device=device, return_full_text=False)
@@ -114,7 +100,6 @@ if __name__ == "__main__":
 
     parser.add_argument('--model-dir', type=str, required=True)
     parser.add_argument('--tokenizer', type=str, default='meta-llama/Meta-Llama-3-8B-Instruct')
-    parser.add_argument("--special-tokens", type=str, default='data/raw/tokenMapping.json')
     parser.add_argument('--experiment-path', type=str, required=True)
     args = parser.parse_args()
     main(args)
