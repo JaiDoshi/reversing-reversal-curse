@@ -35,7 +35,29 @@ def graphFunc(df, title='Experiment 2', save='loss.png'):
     plt.legend()
 
     # Save the plot
-    plt.savefig(f'data/nlu_experiments/Exp2/{save}', dpi=300)
+    plt.savefig(f'data/nlu_experiments/Exp2/Bottom10/{save}', dpi=300)
+
+#-----------------
+
+def graphFuncPct(df, title='Experiment 2', save='loss_pct.png'):
+
+    sns.set_style("whitegrid")
+
+    # Create a figure and an axis
+    plt.figure(figsize=(10, 5))
+    ax = plt.gca()
+
+    # Plot both 'LLM Loss' and 'Loss' lines
+    sns.lineplot(data=df, x='Experiment', y='Gap %', marker='o', label='Loss %', color='red', ax=ax)
+
+    # Add titles and labels
+    plt.title(title)
+    plt.xlabel('Experiment')
+    plt.ylabel('Relative Loss (%)')
+    plt.legend()
+
+    # Save the plot
+    plt.savefig(f'data/nlu_experiments/Exp2/Bottom10/{save}', dpi=300)
 
 #-----------------
 
@@ -59,12 +81,16 @@ for experiment, file in experiments.items():
     loss = [prompt['loss'] for prompt in expLoss]
     loss_avg = sum(loss)/len(loss)
 
-    data.append([experiment, llm_loss_avg, loss_avg])
+    gap_pct = [(prompt['llm_loss'] - prompt['loss'])/prompt['llm_loss'] for prompt in expLoss]
+    gap_pct_avg = sum(gap_pct)/len(gap_pct)
 
-df = pd.DataFrame(data, columns=['Experiment', 'LLM Loss', 'Loss'])
+    data.append([experiment, llm_loss_avg, loss_avg, gap_pct_avg])
+
+df = pd.DataFrame(data, columns=['Experiment', 'LLM Loss', 'Loss', 'Gap %'])
 print(df)
-df.to_csv('data/nlu_experiments/Exp2/loss_bottom10.csv', index=False)
-graphFunc(df, title='Experiment 2 [Bottom 10]', save='loss_bottom10.png')
+df.to_csv('data/nlu_experiments/Exp2/Bottom10/loss.csv', index=False)
+graphFunc(df, title='Experiment 2 [Bottom 10]', save='loss.png')
+graphFuncPct(df, title='Experiment 2 [Bottom 10]', save='loss_pct.png')
 
 #-----------------
 
@@ -79,9 +105,13 @@ for experiment, file in experiments_constantNames.items():
     loss = [prompt['loss'] for prompt in expLoss]
     loss_avg = sum(loss)/len(loss)
 
-    data_constantNames.append([experiment, llm_loss_avg, loss_avg])
+    gap_pct = [(prompt['llm_loss'] - prompt['loss'])/prompt['llm_loss'] for prompt in expLoss]
+    gap_pct_avg = sum(gap_pct)/len(gap_pct)
 
-df_constantNames = pd.DataFrame(data_constantNames, columns=['Experiment', 'LLM Loss', 'Loss'])
+    data_constantNames.append([experiment, llm_loss_avg, loss_avg, gap_pct_avg])
+
+df_constantNames = pd.DataFrame(data_constantNames, columns=['Experiment', 'LLM Loss', 'Loss', 'Gap %'])
 print(df_constantNames)
-df_constantNames.to_csv('data/nlu_experiments/Exp2/loss_constantNames_bottom10.csv', index=False)
-graphFunc(df_constantNames, title='Experiment 2 [Bottom 10] (Constant Names)', save='loss_constantNames_bottom10.png')
+df_constantNames.to_csv('data/nlu_experiments/Exp2/Bottom10/loss_constantNames.csv', index=False)
+graphFunc(df_constantNames, title='Experiment 2 [Bottom 10] (Constant Names)', save='loss_constantNames.png')
+graphFuncPct(df_constantNames, title='Experiment 2 [Bottom 10] (Constant Names)', save='loss_pct_constantNames.png')
