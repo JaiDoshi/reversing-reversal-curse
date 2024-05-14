@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 #-----------------
 
-experiments = {'Vanilla':['p2d_loss.json', 'Vanilla'], 'Exp1_A':['p2d_loss_constantNames.json', 'Control'], 'Exp1_B':['p2d_loss_constantNames.json', 'Treatment A'], 'Exp1_C':['p2d_loss_constantNames.json', 'Treatment B']}
+experiments = {'Vanilla':['p2d_loss.json', 'Vanilla'], 'Exp1_A':['p2d_loss_constantNames.json', 'Control'], 'Exp1_B':['p2d_loss_constantNames.json', 'Treatment A:\nAuxiliary Augmented'], 'Exp1_C':['p2d_loss_constantNames.json', 'Treatment B:\nFull Augmented']}
 
 #-----------------
 
@@ -29,7 +29,7 @@ def graphFunc(df, title='Experiment 2', save='loss.png'):
 
     # Add titles and labels
     plt.title(title)
-    plt.xlabel('Experiment')
+    plt.xlabel('')
     plt.ylabel('Cross-Entropy Loss')
     plt.legend()
     plt.tight_layout()
@@ -55,7 +55,7 @@ def graphFuncPct(df, title='Experiment 2', save='loss_pct.png'):
 
     # Add titles and labels
     plt.title(title)
-    plt.xlabel('Experiment')
+    plt.xlabel('')
     plt.ylabel('Loss Deviation (%)')
     plt.legend()
 
