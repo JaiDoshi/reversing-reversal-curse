@@ -133,6 +133,11 @@ def main(args):
     else:
         p2d = json.load(open(f'{args.experiment_path}/Vanilla/p2d_names.json', 'r'))
 
+    # Keep only first token of the name
+    for prompt in p2d:
+        prompt['name'] = prompt['name'].split()[0]
+        prompt['llm_name'] = prompt['llm_name'].split()[0]
+
     # Move model to gpu and set to eval mode
     model.to(device)
     model.eval()
